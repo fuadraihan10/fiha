@@ -18,7 +18,7 @@ const particles = Array.from({ length: 60 }, (_, i) => ({
 const floatingFlowers = ['🌸', '🌺', '🌷', '💮'];
 
 export default function ForgivenessButtons() {
-  const [response, setResponse] = useState<'forgiven' | 'waiting' | null>(null);
+  const [response, setResponse] = useState<'forgiven' | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
   const [showFinal, setShowFinal] = useState(false);
   const { ref, inView } = useInView({ threshold: 0.3, triggerOnce: true });
@@ -157,33 +157,7 @@ export default function ForgivenessButtons() {
               </motion.button>
             </div>
 
-            <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.5 }}>
-              <motion.button
-                onClick={() => setResponse('waiting')}
-                className="px-8 py-4 rounded-full text-lg text-gray-600 hover:text-gray-800 transition-colors"
-                style={{ fontFamily: '"Fredoka", sans-serif' }}
-                whileHover={{ scale: 1.02 }}
-              >
-                I need more time 🤍
-              </motion.button>
-            </motion.div>
-          </motion.div>
-        )}
 
-        {response === 'waiting' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="py-20"
-          >
-            <motion.p
-              className="text-2xl md:text-3xl text-gray-700"
-              style={{ fontFamily: '"Fredoka", sans-serif' }}
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              Take all the time you need. I'll be here, loving you always. 🤍
-            </motion.p>
           </motion.div>
         )}
 

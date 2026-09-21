@@ -116,7 +116,7 @@ export default function HeroApology() {
         >
           <LoveLetterEnvelope
             text="I know I hurt your feelings, and seeing you upset breaks my heart. You are my favorite person, my safest home, and my whole heart. 💖 I promise to hold your heart safer from now on and make it up to you, one smile at a time, my love. ✨"
-            signature="9:05 PM • jr_alexkazi"
+            signature="9:05 PM • fuad"
           />
         </motion.div>
       </div>

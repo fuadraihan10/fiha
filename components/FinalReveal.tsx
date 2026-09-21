@@ -107,7 +107,7 @@ export default function FinalReveal() {
             className="text-xl italic"
             style={{ color: '#E2B25A' }}
           >
-            — jr_alexkazi
+            — fuad
           </p>
         </motion.div>
       </div>

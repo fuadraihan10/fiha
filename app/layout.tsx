@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "For Fiha 💖",
-  description: "A digital love letter from jr_alexkazi to Fiha 🌸",
+  description: "A digital love letter from fuad to Fiha 🌸",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
