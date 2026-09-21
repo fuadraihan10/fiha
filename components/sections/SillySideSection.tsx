@@ -2,36 +2,154 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-export default function SillySideSection() {
+const cards = [
+  {
+    id: 'goofy',
+    frontEmoji: '🤪',
+    frontLabel: 'Remember this?',
+    image: '/IMG_20250214_174806_992.jpg',
+    caption: 'Our goofy moments 💕',
+    rotate: -6,
+  },
+  {
+    id: 'calls',
+    frontEmoji: '📞',
+    frontLabel: 'Our Calls',
+    image: '/photo_6334827194391578943_y.jpeg',
+    caption: 'Always there. Always you. 💖',
+    rotate: 3,
+  },
+  {
+    id: 'seconds',
+    frontEmoji: '⏱️',
+    frontLabel: 'Two Seconds Apart',
+    images: ['/IMG_20250210_214336_689.jpg', '/IMG_20250210_214428_546.jpg'],
+    caption: 'Just 2 seconds between these 💕',
+    rotate: -2,
+  },
+];
+
+function SparkleBurst({ trigger }: { trigger: boolean }) {
+  return (
+    <AnimatePresence>
+      {trigger && (
+        <>
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-xl pointer-events-none"
+              initial={{ opacity: 1, scale: 0, x: 0, y: 0 }}
+              animate={{
+                opacity: 0,
+                scale: 1.5,
+                x: Math.cos((i * Math.PI) / 4) * 80,
+                y: Math.sin((i * Math.PI) / 4) * 80,
+              }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              style={{ top: '50%', left: '50%' }}
+            >
+              ✨
+            </motion.div>
+          ))}
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+function FlipCard({ card, inView }: { card: typeof cards[0]; inView: boolean }) {
   const [flipped, setFlipped] = useState(false);
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-  const [holdGlow, setHoldGlow] = useState(false);
+  const [sparkle, setSparkle] = useState(false);
+
+  const handleFlip = () => {
+    setFlipped(!flipped);
+    setSparkle(true);
+    setTimeout(() => setSparkle(false), 600);
+  };
 
   return (
-    <section ref={ref} className="w-screen min-h-screen py-40 px-8 bg-blush-pink relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none will-change-transform">
-        {[...Array(50)].map((_, i) => (
+    <motion.div
+      className="relative cursor-pointer"
+      style={{ perspective: '1200px' }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, type: 'spring', stiffness: 100 }}
+      onClick={handleFlip}
+    >
+      <motion.div
+        className="relative w-full max-w-xs aspect-[3/4]"
+        style={{ transformStyle: 'preserve-3d' }}
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 15 }}
+      >
+        <motion.div
+          className="absolute inset-0 bg-cream rounded-2xl p-3 shadow-xl border-4 border-white"
+          style={{ backfaceVisibility: 'hidden' }}
+          animate={{ rotate: card.rotate }}
+        >
+          <div className="absolute -top-2 -left-2 text-2xl">🌸</div>
+          <div className="absolute -top-2 -right-2 text-2xl">🌸</div>
+          <div className="absolute -bottom-2 -left-2 text-2xl">🌸</div>
+          <div className="absolute -bottom-2 -right-2 text-2xl">🌸</div>
+
+          <div className="w-full h-full bg-[#FFD1DC] rounded-xl flex flex-col items-center justify-center gap-4 p-6">
+            <span className="text-6xl">{card.frontEmoji}</span>
+            <span className="text-charcoal text-2xl font-serif text-center">{card.frontLabel}</span>
+            <span className="text-charcoal/60 text-sm">tap to reveal ✨</span>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="absolute inset-0 bg-cream rounded-2xl p-3 shadow-xl border-4 border-white"
+          style={{ backfaceVisibility: 'hidden', rotateY: 180 }}
+        >
+          <div className="absolute -top-2 -left-2 text-2xl">🌸</div>
+          <div className="absolute -top-2 -right-2 text-2xl">🌸</div>
+          <div className="absolute -bottom-2 -left-2 text-2xl">🌸</div>
+          <div className="absolute -bottom-2 -right-2 text-2xl">🌸</div>
+
+          <div className="relative w-full h-full rounded-xl overflow-hidden">
+            {card.images ? (
+              <div className="grid grid-cols-2 gap-1 h-full">
+                <Image src={card.images[0]} alt="Photo 1" fill className="object-cover" sizes="50vw" />
+                <Image src={card.images[1]} alt="Photo 2" fill className="object-cover" sizes="50vw" />
+              </div>
+            ) : (
+              <Image src={card.image!} alt="Memory" fill className="object-cover" sizes="100vw" />
+            )}
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+              <p className="text-white text-sm text-center">{card.caption}</p>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+
+      <SparkleBurst trigger={sparkle} />
+    </motion.div>
+  );
+}
+
+export default function SillySideSection() {
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+
+  return (
+    <section
+      ref={ref}
+      className="w-screen min-h-screen py-20 px-8 relative overflow-hidden"
+      style={{ background: '#FFD1DC' }}
+    >
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        {[...Array(20)].map((_, i) => (
           <motion.div
-            key={`sparkle-${i}`}
-            className="absolute text-rose-red text-6xl"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              opacity: 0,
-            }}
-            animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              opacity: [0, 0.6, 0],
-            }}
-            transition={{
-              duration: 15 + Math.random() * 10,
-              repeat: Infinity,
-              delay: Math.random() * 4,
-            }}
+            key={i}
+            className="absolute text-4xl"
+            initial={{ x: Math.random() * 100 + '%', y: Math.random() * 100 + '%', opacity: 0 }}
+            animate={{ opacity: [0, 0.6, 0] }}
+            transition={{ duration: 4, repeat: Infinity, delay: Math.random() * 2 }}
           >
             ✨
           </motion.div>
@@ -40,217 +158,26 @@ export default function SillySideSection() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          className="text-center mb-36"
-          initial={{ opacity: 0, y: 50 }}
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.2 }}
+          transition={{ duration: 0.8 }}
         >
           <h2
-            className="font-serif text-8xl md:text-9xl text-charcoal mb-6"
+            className="font-serif text-4xl md:text-6xl text-charcoal mb-4"
             style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700 }}
           >
-            And then there's us being completely stupid together 🤪💖
+            And then there&apos;s us being completely stupid together 🤪💖
           </h2>
-          <p className="text-charcoal text-2xl font-light">
+          <p className="text-charcoal text-lg md:text-xl font-light max-w-2xl mx-auto">
             Living for all our unfiltered giggles, silly faces, and chaotic late-night conversations. 💌✨
           </p>
         </motion.div>
 
-        <div className="space-y-28">
-          <motion.div
-            className="flex justify-center"
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1.1, delay: 0.2 }}
-            onTouchStart={() => setHoldGlow(true)}
-            onTouchEnd={() => setHoldGlow(false)}
-          >
-            <motion.div
-              className="relative w-96 cursor-pointer will-change-transform"
-              whileHover={{ scale: 1.15, rotate: -3 }}
-              animate={{ rotate: [-12, -12, -12] }}
-            >
-              <motion.div
-                className="relative w-full h-full bg-cream p-5 rounded-3xl"
-                animate={{
-                  boxShadow: holdGlow
-                    ? [
-                        '0 25px 80px rgba(193, 39, 59, 0.25), 0 0 100px rgba(255, 209, 220, 0.5)',
-                        '0 25px 120px rgba(193, 39, 59, 0.45), 0 0 160px rgba(255, 209, 220, 0.7)',
-                        '0 25px 80px rgba(193, 39, 59, 0.25), 0 0 100px rgba(255, 209, 220, 0.5)',
-                      ]
-                    : '0 20px 60px rgba(193, 39, 59, 0.2), 0 0 80px rgba(255, 209, 220, 0.3)',
-                }}
-                transition={{ duration: 3, repeat: holdGlow ? Infinity : 0 }}
-              >
-                <Image
-                  src="/IMG_20250214_174806_992.jpg"
-                  alt="Fiha and I being completely silly together in a playful moment"
-                  width={400}
-                  height={500}
-                  quality={95}
-                  className="w-full h-full object-cover rounded-2xl"
-                />
-              </motion.div>
-
-              {[0, 1].map((i) => (
-                <motion.div
-                  key={`tape-${i}`}
-                  className="absolute rounded-lg bg-white/70 backdrop-blur-md"
-                  style={{
-                    top: i === 0 ? '-16px' : 'auto',
-                    bottom: i === 1 ? '-16px' : 'auto',
-                    left: '15%',
-                    right: i === 0 ? '-16px' : 'auto',
-                    width: '100px',
-                    height: '20px',
-                    boxShadow: '3px 3px 10px rgba(0, 0, 0, 0.2)',
-                  }}
-                  animate={{ rotate: i === 0 ? [10, 15, 10] : [-10, -15, -10] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.3 }}
-                />
-              ))}
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="grid grid-cols-1 lg:grid-cols-2 gap-24"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4 }}
-          >
-            <motion.div
-              className="relative rounded-3xl overflow-hidden group cursor-pointer will-change-transform"
-              initial={{ opacity: 0, x: -70 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 1.1, delay: 0.5 }}
-              whileHover={{ scale: 1.1 }}
-            >
-              <motion.div
-                className="absolute inset-0 pointer-events-none rounded-3xl will-change-transform"
-                animate={{
-                  boxShadow: [
-                    'inset 0 0 80px rgba(255, 209, 220, 0.6), 0 0 100px rgba(255, 209, 220, 0.5)',
-                    'inset 0 0 140px rgba(255, 209, 220, 0.8), 0 0 160px rgba(255, 209, 220, 0.6)',
-                    'inset 0 0 80px rgba(255, 209, 220, 0.6), 0 0 100px rgba(255, 209, 220, 0.5)',
-                  ],
-                }}
-                transition={{ duration: 4.5, repeat: Infinity }}
-              />
-              <div
-                className="relative aspect-square rounded-3xl overflow-hidden backdrop-blur-3xl"
-                style={{
-                  background: 'rgba(255, 209, 220, 0.6)',
-                  border: '4px solid rgba(255, 209, 220, 0.9)',
-                }}
-              >
-                <Image
-                  src="/photo_6334827194391578943_y.jpeg"
-                  alt="Fiha and I in a two-panel video-call collage"
-                  fill
-                  quality={95}
-                  className="object-cover"
-                  sizes="50vw"
-                />
-                <motion.div
-                  className="absolute inset-0 pointer-events-none rounded-3xl"
-                  animate={{
-                    boxShadow: [
-                      'inset 0 0 0 3px rgba(255, 209, 220, 0.6)',
-                      'inset 0 0 30px 3px rgba(255, 209, 220, 0.9)',
-                      'inset 0 0 0 3px rgba(255, 209, 220, 0.6)',
-                    ],
-                  }}
-                  transition={{ duration: 2.5, repeat: Infinity }}
-                />
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="flex items-center justify-center"
-              initial={{ opacity: 0, x: 70 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 1.1, delay: 0.6 }}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.25, 1] }}
-                transition={{ duration: 3.5, repeat: Infinity }}
-                className="text-center"
-              >
-                <p className="text-charcoal text-4xl font-light">Our Calls 📞</p>
-                <p className="text-charcoal text-2xl font-light mt-4 text-opacity-70">Always there. Always you. 💕</p>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="flex justify-center"
-            initial={{ opacity: 0, y: 70 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.1, delay: 0.7 }}
-          >
-            <div className="w-full max-w-2xl">
-              <motion.h3
-                className="font-serif text-7xl md:text-8xl text-charcoal mb-14 text-center"
-                style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700 }}
-              >
-                Two Seconds Apart ⏱️💖
-              </motion.h3>
-
-              <motion.div
-                className="relative w-full aspect-square cursor-pointer rounded-3xl overflow-hidden mx-auto will-change-transform"
-                onClick={() => setFlipped(!flipped)}
-                style={{
-                  perspective: '2000px',
-                }}
-              >
-                <motion.div
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    rotateY: flipped ? 180 : 0,
-                  }}
-                  transition={{ duration: 1.4, type: 'spring', stiffness: 50, damping: 20 }}
-                  className="w-full h-full"
-                >
-                  <motion.div
-                    style={{ backfaceVisibility: 'hidden' }}
-                    className="absolute w-full h-full"
-                  >
-                    <Image
-                      src="/IMG_20250210_214336_689.jpg"
-                      alt="Sunny extreme close-up of Fiha and I - front"
-                      fill
-                      quality={95}
-                      className="object-cover rounded-3xl"
-                      sizes="100vw"
-                    />
-                  </motion.div>
-
-                  <motion.div
-                    style={{ backfaceVisibility: 'hidden', rotateY: 180 }}
-                    className="absolute w-full h-full"
-                  >
-                    <Image
-                      src="/IMG_20250210_214428_546.jpg"
-                      alt="Sunny extreme close-up of Fiha and I - back"
-                      fill
-                      quality={95}
-                      className="object-cover rounded-3xl"
-                      sizes="100vw"
-                    />
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-
-              <motion.p
-                className="text-center text-charcoal/70 text-2xl mt-10 font-light"
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 3.5, repeat: Infinity }}
-              >
-                tap to flip 💕
-              </motion.p>
-            </div>
-          </motion.div>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+          {cards.map((card) => (
+            <FlipCard key={card.id} card={card} inView={inView} />
+          ))}
         </div>
       </div>
     </section>

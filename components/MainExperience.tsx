@@ -8,12 +8,14 @@ import YouSection from './sections/YouSection';
 import EmotionalPeak from './sections/EmotionalPeak';
 import FinalApology from './sections/FinalApology';
 import ForgivenessButtons from './sections/ForgivenessButtons';
-import MusicToggle from './MusicToggle';
+import VinylPlayer from './VinylPlayer';
+import DraggableStickers from './DraggableStickers';
 
 export default function MainExperience() {
   return (
-    <div className="relative w-full bg-cream">
-      <MusicToggle />
+    <div className="relative w-full bg-cherry-cream">
+      <VinylPlayer />
+      <DraggableStickers />
       <HeroApology />
       <UsSection />
       <OurMemoryPathSection />
