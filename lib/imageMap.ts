@@ -1,0 +1,18 @@
+export const imageMap = {
+  hero: '/photo_6064472012564317518_y.jpg',
+  us1: '/photo_6127373341921318062_w.jpg',
+  us2: '/photo_6127373341921318063_w.jpg',
+  memory1: '/photo_6197504230806373599_y.jpg',
+  memory2: '/photo_6197504230806373605_y.jpg',
+  memory3: '/photo_6294209954961277959_y.jpg',
+  memory4: '/photo_6311957799210433560_y.jpg',
+  silly1: '/photo_6330266858246225834_y.jpg',
+  silly2: '/photo_6330266858246225840_y.jpg',
+  you1: '/photo_6334724600507778357_y.jpg',
+  you2: '/photo_6334827194391578943_y.jpeg',
+  emotionalPeak: '/IMG_20260323_184249.jpg',
+  flipCard1: '/IMG_20250210_214336_689.jpg',
+  flipCard2: '/IMG_20250210_214428_546.jpg',
+  extra1: '/IMG_20250214_174806_992.jpg',
+  extra2: '/IMG_20250219_191832_553.jpg',
+};
