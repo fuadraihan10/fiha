@@ -15,24 +15,45 @@ export default function VinylPlayer({ audioSrc }: VinylPlayerProps) {
     if (audioSrc && !audioRef.current) {
       audioRef.current = new Audio(audioSrc)
       audioRef.current.loop = true
+      audioRef.current.volume = 0.5
     }
+    const startAudio = () => {
+      if (audioRef.current && !isPlaying) {
+        audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {})
+      }
+      window.removeEventListener('click', startAudio)
+      window.removeEventListener('touchstart', startAudio)
+      window.removeEventListener('scroll', startAudio)
+    }
+    window.addEventListener('click', startAudio, { once: true })
+    window.addEventListener('touchstart', startAudio, { once: true })
+    window.addEventListener('scroll', startAudio, { once: true })
     return () => {
       if (audioRef.current) {
         audioRef.current.pause()
         audioRef.current = null
       }
+      window.removeEventListener('click', startAudio)
+      window.removeEventListener('touchstart', startAudio)
+      window.removeEventListener('scroll', startAudio)
     }
   }, [audioSrc])
 
   const togglePlay = () => {
     if (!audioRef.current) {
-      setIsPlaying(!isPlaying)
+      if (audioSrc) {
+        audioRef.current = new Audio(audioSrc)
+        audioRef.current.loop = true
+        audioRef.current.volume = 0.5
+        audioRef.current.play().catch(() => {})
+        setIsPlaying(true)
+      }
       return
     }
     if (isPlaying) {
       audioRef.current.pause()
     } else {
-      audioRef.current.play()
+      audioRef.current.play().catch(() => {})
     }
     setIsPlaying(!isPlaying)
   }
