@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import OpeningQuestion from '@/components/OpeningQuestion';
 import MainExperience from '@/components/MainExperience';
+import HeartTrail from '@/components/HeartTrail';
 import FilmGrain from '@/components/FilmGrain';
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
 
   return (
     <main className="bg-cream overflow-x-hidden">
+      <HeartTrail />
       <FilmGrain />
       {!hasAccepted ? (
         <OpeningQuestion onAccept={() => setHasAccepted(true)} />
@@ -26,3 +28,4 @@ export default function Home() {
     </main>
   );
 }
+
