@@ -167,10 +167,10 @@ export default function SillySideSection() {
             className="font-serif text-4xl md:text-6xl text-charcoal mb-4"
             style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700 }}
           >
-            And then there&apos;s us being completely stupid together 🤪💖
+            Our Silly Side 🤪💖
           </h2>
           <p className="text-charcoal text-lg md:text-xl font-light max-w-2xl mx-auto">
-            Living for all our unfiltered giggles, silly faces, and chaotic late-night conversations. 💌✨
+            Our favorite unfiltered giggles, silly faces, and chaotic late-night conversations. 💌✨
           </p>
         </motion.div>
 

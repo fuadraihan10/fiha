@@ -14,7 +14,7 @@ import DraggableStickers from './DraggableStickers';
 export default function MainExperience() {
   return (
     <div className="relative w-full bg-cherry-cream">
-      <VinylPlayer />
+      <VinylPlayer audioSrc="/love-song.webm" />
       <DraggableStickers />
       <HeroApology />
       <UsSection />
