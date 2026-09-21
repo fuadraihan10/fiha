@@ -146,7 +146,7 @@ export default function YouSection() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1.2, delay: 0.6 }}
           >
-            <div
+            <motion.div
               ref={cardRef3}
               onMouseMove={(e) => handleTilt(e, setTilt3, cardRef3)}
               onMouseLeave={() => resetTilt(setTilt3)}
@@ -177,7 +177,7 @@ export default function YouSection() {
                 }}
                 transition={{ duration: 5, repeat: Infinity }}
               />
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

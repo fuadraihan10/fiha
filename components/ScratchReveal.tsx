@@ -64,6 +64,7 @@ export default function ScratchReveal({
     const result = getCanvasContext()
     if (!result) return
     const { canvas, ctx } = result
+    if (!ctx) return
     const container = containerRef.current
     if (!container) return
 
@@ -86,6 +87,7 @@ export default function ScratchReveal({
     const result = getCanvasContext()
     if (!result || revealed || fadeOut) return
     const { canvas, ctx } = result
+    if (!ctx) return
 
     const radius = 35
 
